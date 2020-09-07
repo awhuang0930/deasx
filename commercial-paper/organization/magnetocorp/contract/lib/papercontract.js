@@ -124,8 +124,10 @@ class CommercialPaperContract extends Contract {
      */
     async queryAllPaper(ctx) {
 
+        let startKey = CommercialPaper.makeKey([issuer, paperNumber]);
+        let endKeyKey = CommercialPaper.makeKey([issuer, paperNumber]);
         // Update the paper
-        let res = await ctx.paperList.queryAllPaper();
+        let res = await ctx.paperList.queryAllPaper(startKey,endKeyKey);
         return res;
     }
 
