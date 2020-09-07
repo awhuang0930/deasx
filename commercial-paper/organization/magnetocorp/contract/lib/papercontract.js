@@ -119,6 +119,16 @@ class CommercialPaperContract extends Contract {
         return paper;
     }
 
+    /***
+     *  Query All current papers
+     */
+    async queryAllPaper(ctx) {
+
+        // Update the paper
+        res = await ctx.paperList.queryAllPaper();
+        return paper;
+    }
+
     /**
      * Redeem commercial paper
      *
