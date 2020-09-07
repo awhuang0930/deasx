@@ -125,8 +125,8 @@ class CommercialPaperContract extends Contract {
     async queryAllPaper(ctx) {
 
         // Update the paper
-        res = await ctx.paperList.queryAllPaper();
-        return paper;
+        let res = await ctx.paperList.queryAllPaper();
+        return res;
     }
 
     /**
