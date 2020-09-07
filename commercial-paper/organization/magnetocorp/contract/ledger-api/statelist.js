@@ -22,6 +22,8 @@ class StateList {
         this.name = listName;
         this.supportedClasses = {};
 
+        console.log("Allan listName is:" + this.name);
+
     }
 
     /**
@@ -67,10 +69,10 @@ class StateList {
     async queryAllState(startKey, endKey) {
         // const startKey = 'CAR0';
         // const endKey = 'CAR999';
-        let compositeStartKey = makeKey('MagnetoCorp', startKey);
-        let compositeEndKey = makeKey('MagnetoCorp', endKey);
+        let compositeStartKey = this.ctx.stub.createCompositeKey(this.name, startKey);
+        let compositeEndKey = this.ctx.stub.createCompositeKey(this.name, endKey);
 
-        console.log("Allan startKey:" + compositeStartKey);
+        // console.log("Allan startKey:" + compositeStartKey);
 
         const iterator = await this.ctx.stub.getStateByRange(compositeStartKey, compositeEndKey);
 
