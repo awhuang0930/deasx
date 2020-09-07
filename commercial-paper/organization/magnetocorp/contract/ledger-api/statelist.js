@@ -4,6 +4,7 @@ SPDX-License-Identifier: Apache-2.0
 
 'use strict';
 const State = require('./state.js');
+const { makeKey } = require('./state.js');
 
 /**
  * StateList provides a named virtual container for a set of ledger states.
@@ -30,6 +31,7 @@ class StateList {
      */
     async addState(state) {
         let key = this.ctx.stub.createCompositeKey(this.name, state.getSplitKey());
+        console.log("Allan, ledgerKey:" + key);
         let data = State.serialize(state);
         await this.ctx.stub.putState(key, data);
     }
@@ -65,8 +67,12 @@ class StateList {
     async queryAllState(startKey, endKey) {
         // const startKey = 'CAR0';
         // const endKey = 'CAR999';
+        let compositeStartKey = makeKey('MagnetoCorp', startKey);
+        let compositeEndKey = makeKey('MagnetoCorp', endKey);
 
-        const iterator = await this.ctx.stub.getStateByRange(startKey, endKey);
+        console.log("Allan startKey:" + compositeStartKey);
+
+        const iterator = await this.ctx.stub.getStateByRange(compositeStartKey, compositeEndKey);
 
         const allResults = [];
         while (true) {
