@@ -69,8 +69,8 @@ class StateList {
     async queryAllState(startKey, endKey) {
         // const startKey = 'CAR0';
         // const endKey = 'CAR999';
-        let compositeStartKey = this.ctx.stub.createCompositeKey(this.name, startKey);
-        let compositeEndKey = this.ctx.stub.createCompositeKey(this.name, endKey);
+        let compositeStartKey = this.ctx.stub.createCompositeKey(this.name, State.splitKey(startKey));
+        let compositeEndKey = this.ctx.stub.createCompositeKey(this.name, State.splitKey(endKey));
 
         // console.log("Allan startKey:" + compositeStartKey);
 
