@@ -12,7 +12,7 @@ const TradeOrder = require('./order.js');
 class TradeOrderList extends StateList {
 
     constructor(ctx) {
-        super(ctx, 'deasx.tradeOrderlist');
+        super(ctx, 'org.deasx.tradeOrderlist');
         this.use(TradeOrder);
     }
 

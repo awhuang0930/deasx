@@ -22,7 +22,7 @@ const orderState = {
 class TradeOrder extends State {
 
     constructor(obj) {
-        super(TradeOrder.getClass(), ['Order', obj.Id]);
+        super(TradeOrder.getClass(), ['Order', obj.id]);
         Object.assign(this, obj);
     }
 
@@ -101,7 +101,7 @@ class TradeOrder extends State {
     }
 
     static getClass() {
-        return 'deasx.tradeOrder';
+        return 'org.deasx.tradeOrder';
     }
 }
 
