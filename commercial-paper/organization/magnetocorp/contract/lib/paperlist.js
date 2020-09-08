@@ -30,6 +30,12 @@ class PaperList extends StateList {
         return this.queryAllState(startKey, endKey);
     }
 
+    async queryState(query) {
+        // const startKey = '00000';
+        // const endKey = '99999';
+        return this.queryState(query);
+    }
+
     async updatePaper(paper) {
         return this.updateState(paper);
     }

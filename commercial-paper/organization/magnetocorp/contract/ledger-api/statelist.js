@@ -102,6 +102,37 @@ class StateList {
         }
     }
 
+    async queryState(query) {
+
+        console.log("Allan query:" + query);
+        const iterator = await this.ctx.stub.getQueryResult(query);
+
+        const allResults = [];
+        while (true) {
+            const res = await iterator.next();
+
+            if (res.value && res.value.value.toString()) {
+                console.log(res.value.value.toString('utf8'));
+
+                const Key = res.value.key;
+                let Record;
+                try {
+                    Record = JSON.parse(res.value.value.toString('utf8'));
+                } catch (err) {
+                    console.log(err);
+                    Record = res.value.value.toString('utf8');
+                }
+                allResults.push({ Key, Record });
+            }
+            if (res.done) {
+                console.log('end of data');
+                await iterator.close();
+                console.info(allResults);
+                return JSON.stringify(allResults);
+            }
+        }
+    }
+
     /** Stores the class for future deserialization */
     use(stateClass) {
         this.supportedClasses[stateClass.getClass()] = stateClass;
