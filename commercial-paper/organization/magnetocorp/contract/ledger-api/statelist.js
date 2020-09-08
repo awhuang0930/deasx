@@ -4,7 +4,6 @@ SPDX-License-Identifier: Apache-2.0
 
 'use strict';
 const State = require('./state.js');
-const { makeKey } = require('./state.js');
 
 /**
  * StateList provides a named virtual container for a set of ledger states.
@@ -21,9 +20,6 @@ class StateList {
         this.ctx = ctx;
         this.name = listName;
         this.supportedClasses = {};
-
-        console.log("Allan listName is:" + this.name);
-
     }
 
     /**
@@ -64,73 +60,6 @@ class StateList {
         let key = this.ctx.stub.createCompositeKey(this.name, state.getSplitKey());
         let data = State.serialize(state);
         await this.ctx.stub.putState(key, data);
-    }
-
-    async queryAllState(startKey, endKey) {
-        // const startKey = 'CAR0';
-        // const endKey = 'CAR999';
-        let compositeStartKey = this.ctx.stub.createCompositeKey(this.name, State.splitKey(startKey));
-        let compositeEndKey = this.ctx.stub.createCompositeKey(this.name, State.splitKey(endKey));
-
-        // console.log("Allan startKey:" + compositeStartKey);
-
-        const iterator = await this.ctx.stub.getStateByRange(compositeStartKey, compositeEndKey);
-
-        const allResults = [];
-        while (true) {
-            const res = await iterator.next();
-
-            if (res.value && res.value.value.toString()) {
-                console.log(res.value.value.toString('utf8'));
-
-                const Key = res.value.key;
-                let Record;
-                try {
-                    Record = JSON.parse(res.value.value.toString('utf8'));
-                } catch (err) {
-                    console.log(err);
-                    Record = res.value.value.toString('utf8');
-                }
-                allResults.push({ Key, Record });
-            }
-            if (res.done) {
-                console.log('end of data');
-                await iterator.close();
-                console.info(allResults);
-                return JSON.stringify(allResults);
-            }
-        }
-    }
-
-    async queryState(query) {
-
-        console.log("Allan query:" + query);
-        const iterator = await this.ctx.stub.getQueryResult(query);
-
-        const allResults = [];
-        while (true) {
-            const res = await iterator.next();
-
-            if (res.value && res.value.value.toString()) {
-                console.log(res.value.value.toString('utf8'));
-
-                const Key = res.value.key;
-                let Record;
-                try {
-                    Record = JSON.parse(res.value.value.toString('utf8'));
-                } catch (err) {
-                    console.log(err);
-                    Record = res.value.value.toString('utf8');
-                }
-                allResults.push({ Key, Record });
-            }
-            if (res.done) {
-                console.log('end of data');
-                await iterator.close();
-                console.info(allResults);
-                return JSON.stringify(allResults);
-            }
-        }
     }
 
     /** Stores the class for future deserialization */
