@@ -135,6 +135,7 @@ class CommercialPaperContract extends Contract {
      *  Query All current papers
      */
     async queryPaper(ctx, query) {
+        console.log("Allan queryString is:" + query);
 
         // Update the paper
         let res = await ctx.paperList.queryState(query);
