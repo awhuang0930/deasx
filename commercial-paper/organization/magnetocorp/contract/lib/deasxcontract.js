@@ -69,6 +69,23 @@ class DeAsxContract extends Contract {
         return order;
     }
 
+    async transact(ctx, buyOrderId, sellOrderId){
+        // Todo1 : In the appliation JS,
+        //  after place an order
+        // 1. lock this order
+        // 2. Get the list of protential matching orders
+        // 3. tranaction against to the matching orders
+        // 4. after the potential transaction completed, if the Unit still remained 
+        //    unlock the order and leave it on the market
+
+        // Todo2: Here
+        // 1. check the lock status of counterpart order
+        // 2. if it is still unlock, lock it. and create a new transaction.
+        // 2.1 Update the 2 order accordingly.
+        // 2.2 unlock the order need to be back to market again.
+        // 3. if the counterparty order is locked, bypass this order.
+    }
+
     /**
      * Cancel order
      *

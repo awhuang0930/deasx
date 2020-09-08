@@ -15,6 +15,8 @@ const orderState = {
     CANCELLED: 4
 };
 
+const isLocked = false;
+
 /**
  * CommercialPaper class extends State class
  * Class will be used by application and smart contract to define a paper
@@ -48,6 +50,14 @@ class TradeOrder extends State {
     /**
      * Useful methods to encapsulate commercial paper states
      */
+
+     lock(){
+         this.isLocked = true;
+     }
+
+     unLock(){
+        this.isLocked = false;
+    }
 
     setPlaced() {
         this.currentState = orderState.FILLED;
