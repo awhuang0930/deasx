@@ -65,14 +65,14 @@ async function main() {
         // issue commercial paper
         console.log('Submit commercial paper issue transaction.');
 
-        const issueResponse = await contract.submitTransaction('transact','6ace6ff9-f182-b086-0e2e-b0906219f865','7ea88f96-0c03-9613-94f9-6be311cce30b', 'Seller');
+        const issueResponse = await contract.submitTransaction('placeOrder','AllanCorp','ANZ', '60', '32.20', 'Buy');
 
         // process response
         console.log('Process issue transaction response.'+issueResponse);
 
-        //let paper = TradeOrder.fromBuffer(issueResponse);
+        let paper = TradeOrder.fromBuffer(issueResponse);
 
-        //console.log(`${paper.issuer} commercial paper : ${paper.paperNumber} successfully issued for value ${paper.faceValue}`);
+        console.log(`${paper.issuer} commercial paper : ${paper.paperNumber} successfully issued for value ${paper.faceValue}`);
         console.log('Transaction complete.');
 
     } catch (error) {
