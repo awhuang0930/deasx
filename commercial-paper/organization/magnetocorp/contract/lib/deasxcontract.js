@@ -93,29 +93,29 @@ class DeAsxContract extends Contract {
         let buyOrder = await ctx.tradeOrderList.getOrder(buyOrderKey);
 
         if ( sellOrder.isFilled() || buyOrder.isFilled()){
-            return 'No trade made';
+            return 'No trade made, order has been filled';
         }
 
         let tradePrice = (triggeredBy === "Seller" ) ? buyOrder.price : sellOrder.price;
         let tradeUnit = parseInt(Math.min(buyOrder.unitOnMarket, sellOrder.unitOnMarket));
 
-        if ( buyOrder.unitOnMarket > sellOrder.unitOnMarket){
+        let buyOrderUnitOnMarket = parseInt(buyOrder.unitOnMarket);
+        let sellOrderUnitOnMarket = parseInt(sellOrder.unitOnMarket); 
+        if ( buyOrderUnitOnMarket > sellOrderUnitOnMarket){
             buyOrder.setPartialFilled();
             sellOrder.setFilled();
-            let unitOnMarket = parseInt(buyOrder.unitOnMarket);
-            unitOnMarket = unitOnMarket - tradeUnit;
+            let unitOnMarket = buyOrderUnitOnMarket - tradeUnit;
             buyOrder.setUnitOnMarket(unitOnMarket.toString());
             sellOrder.setUnitOnMarket('0');
-        }else if (buyOrder.unitOnMarket === sellOrder.unitOnMarket){
+        }else if (buyOrderUnitOnMarket === sellOrderUnitOnMarket){
             buyOrder.setFilled();
             sellOrder.setFilled();
             buyOrder.setUnitOnMarket('0');
             sellOrder.setUnitOnMarket('0');
-        }else{ // buyOrder.unitOnMarket < sellOrder.unitOnMarket
+        }else{ // buyOrder.unitOnMarket < sellOrderUnitOnMarket
             sellOrder.setPartialFilled();
             buyOrder.setFilled();
-            let unitOnMarket = parseInt(sellOrder.unitOnMarket);
-            unitOnMarket = unitOnMarket - tradeUnit;
+            let unitOnMarket = sellOrderUnitOnMarket - tradeUnit;
             sellOrder.setUnitOnMarket(unitOnMarket.toString());
             buyOrder.setUnitOnMarket('0');
         }
