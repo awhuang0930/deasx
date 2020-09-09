@@ -29,7 +29,7 @@ class StateList {
      */
     async addState(state) {
         let key = this.ctx.stub.createCompositeKey(this.name, state.getSplitKey());
-        state.creator = this.ctx.stub.getCreator();
+        state.creator = this.ctx.stub.getMspID();
         console.log("Allan, ledgerKey:" + key);
         let data = State.serialize(state);
         await this.ctx.stub.putState(key, data);
