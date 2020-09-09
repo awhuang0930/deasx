@@ -54,10 +54,9 @@ class DeAsxContract extends Contract {
     /**
      * Place order
     */
-    async placeOrder(ctx, id, stockCode, unit, price, buyOrSell) {
-
+    async placeOrder(ctx, broker, stockCode, unit, price, buyOrSell) {
         // create an instance of the order
-        let order = TradeOrder.createInstance(id, stockCode, unit, price, buyOrSell);
+        let order = TradeOrder.createInstance(broker, stockCode, unit, unit, price, buyOrSell);
 
         // Smart contract, rather than order, moves order into PlACED state
         order.setPlaced();

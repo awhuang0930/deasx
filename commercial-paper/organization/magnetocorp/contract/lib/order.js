@@ -76,9 +76,8 @@ class TradeOrder extends State {
     }
 
     setUnitOnMarket(newUnit) {
-        this.unit = newUnit;
+        this.unitOnMarket = newUnit;
     }
-
 
     isPartialFilled() {
         return this.currentState === orderState.PARTIALFILLED;
@@ -111,8 +110,10 @@ class TradeOrder extends State {
     /**
      * Factory method to create a commercial paper object
      */
-    static createInstance(id, stockCode, unit, price, buyOrSell) {
-        return new TradeOrder({ id, stockCode, unit, price, buyOrSell });
+    static createInstance(broker, stockCode, unit, unitOnMarket, price, buyOrSell) {
+        let id = TradeOrder.createGuid();
+        let orderTime = TradeOrder.formatDatetime(new Date());
+        return new TradeOrder({ id, broker, stockCode, unit, unitOnMarket, price, buyOrSell, orderTime});
     }
 
     static getClass() {
