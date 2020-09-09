@@ -22,7 +22,6 @@ class DeAsxContext extends Context {
         // All orders are held in a list of trade orders
         this.tradeOrderList = new TradeOrderList(this);
         this.transactionList = new TransactionList(this);
-        this.creator = this.stub.getCreator();
     }
 }
 
@@ -68,8 +67,7 @@ class DeAsxContract extends Contract {
         await ctx.tradeOrderList.addOrder(order);
 
         // Must return a serialized order to caller of smart contract
-        //return order;
-        return ctx.creator;
+        return order;
     }
 
     async transact(ctx, buyOrderId, sellOrderId){
