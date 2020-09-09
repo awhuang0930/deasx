@@ -113,7 +113,7 @@ class DeAsxContract extends Contract {
             sellOrder.setUnitOnMarket('0');
         }else{ // buyOrder.unitOnMarket < sellOrder.unitOnMarket
             sellOrder.setPartialFilled();
-            buyOder.setFilled();
+            buyOrder.setFilled();
             let unitOnMarket = parseInt(sellOrder.unitOnMarket);
             unitOnMarket -= tradeUnit;
             sellOrder.setUnitOnMarket(unitOnMarket.toString());
