@@ -97,7 +97,7 @@ class DeAsxContract extends Contract {
         }
 
         let tradePrice = (triggeredBy === "Seller" ) ? buyOrder.price : sellOrder.price;
-        let tradeUnit = partInt(Math.min(buyOrder.unitOnMarket, sellOrder.unitOnMarket));
+        let tradeUnit = parseInt(Math.min(buyOrder.unitOnMarket, sellOrder.unitOnMarket));
 
         if ( buyOrder.unitOnMarket > sellOrder.unitOnMarket){
             buyOrder.setPartialFilled();
