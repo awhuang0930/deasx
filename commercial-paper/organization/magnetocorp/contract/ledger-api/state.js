@@ -108,7 +108,7 @@ class State {
         let hours = ("0" + (date_ob.getHours() + 1)).slice(-2);
         let minutes = ("0" + (date_ob.getMinutes() + 1)).slice(-2);
         let seconds = ("0" + (date_ob.getSeconds() + 1)).slice(-2);
-        let milliseconds = ("00" + (date_ob.getMilliSeconds() + 1)).slice(-3);
+        let milliseconds = ("00" + (date_ob.getMilliseconds() + 1)).slice(-3);
 
         // return date & time in YYYY-MM-DD HH:MM:SS format
         return year + "-" + month + "-" + date + "T" + hours + ":" + minutes + ":" 
