@@ -5,7 +5,7 @@ let askPrice=42.00;
 let priceFilter = {"$gt":askPrice.toString()}
 
 // Make a request for a user with a given ID
-axios.post('http://192.168.171.216:5984/mychannel_papercontract/_find',{
+axios.post('http://192.168.171.216:5984/mychannel_deasxcontract/_find',{
   "selector":{
     "stockCode":stockCode,
     "class":"org.deasx.tradeOrder",
@@ -33,8 +33,8 @@ axios.post('http://192.168.171.216:5984/mychannel_papercontract/_find',{
     // handle success
     let result = response.data.docs.map(d=>{
             return {
-                issuer : d.issuer,
-                faceValue : d.faceValue
+                id : d.id,
+                unitOnMarket : d.unitOnMarket
             };
     });
     console.log(response.data.docs);

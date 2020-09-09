@@ -66,7 +66,7 @@ async function main() {
         console.log('Submit commercial paper issue transaction.');
 
         //const issueResponse = await contract.submitTransaction('transact','cb6fcca0-1dda-111d-d50d-1d01a28e6bd2','e4c7ede3-fef0-bb34-611f-c97978ff125b');
-        const issueResponse = await contract.submitTransaction('transact','b52d9547-e52a-970a-2a06-5e0054a3289e','74eaaf6e-7156-c49f-aaa8-aeb182fa10d8');
+        const issueResponse = await contract.submitTransaction('transact','cb6fcca0-1dda-111d-d50d-1d01a28e6bd2','904c8d4a-8789-555a-0778-961e06f9c915');
 
         // process response
         console.log('Process issue transaction response.'+issueResponse);
