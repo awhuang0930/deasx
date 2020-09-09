@@ -1,12 +1,33 @@
 const axios = require('axios');
 
+let stockCode='ANZ';
+let askPrice=42.00;
+let priceFilter = {"$gt":askPrice.toString()}
+
 // Make a request for a user with a given ID
-axios.post('http://192.168.171.217:5984/mychannel_papercontract/_find',{
-    "selector":{
-        "faceValue":{
-            "$gt":"4000000"
-        }
+axios.post('http://192.168.171.216:5984/mychannel_papercontract/_find',{
+  "selector":{
+    "stockCode":stockCode,
+    "class":"org.deasx.tradeOrder",
+    "buyOrSell": "Buy",
+    "price": priceFilter,
+    "currentState":{
+      "$or":[1,2]
     }
+  },
+  "fields":[
+      "id",
+      "class",
+      "stockCode",
+      "buyOrSell",
+      "price",
+      "unit",
+      "unitOnMarket",
+      "currentState"
+  ],
+  "sort": [{"price": "desc"}],
+  "limit":50
+
 })
   .then(function (response) {
     // handle success
