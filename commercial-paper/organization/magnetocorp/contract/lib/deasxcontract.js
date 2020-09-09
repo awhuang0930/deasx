@@ -87,7 +87,7 @@ class DeAsxContract extends Contract {
         let sellOrderKey = TradeOrder.makeKey(['Order', sellOrderId]);
         let sellOrder = await ctx.tradeOrderList.getOrder(sellOrderKey);
 
-        let unitOnMarket = parseInt(sellOrder.unit);
+        let unitOnMarket = parseInt(sellOrder.unitOnMarket);
         unitOnMarket--;
         sellOrder.setUnitOnMarket(unitOnMarket.toString());
         sellOrder.setPartialFilled()
