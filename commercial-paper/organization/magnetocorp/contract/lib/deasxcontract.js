@@ -7,12 +7,12 @@ SPDX-License-Identifier: Apache-2.0
 // Fabric smart contract classes
 const { Contract, Context } = require('fabric-contract-api');
 
-// PaperNet specifc classes
+// DeAsx specifc classes
 const TradeOrder = require('./order.js');
 const TradeOrderList = require('./orderlist.js');
 
 /**
- * A custom context provides easy access to list of all commercial papers
+ * A custom context provides easy access to list of all tradeOrder and transactions
  */
 class DeAsxContext extends Context {
 
@@ -84,6 +84,17 @@ class DeAsxContract extends Contract {
         // 2.1 Update the 2 order accordingly.
         // 2.2 unlock the order need to be back to market again.
         // 3. if the counterparty order is locked, bypass this order.
+
+        let sellOrderKey = TradeOrder.makeKey(['Order', sellOrderId]);
+        let sellOrder = await ctx.tradeOrderList.getOrder(sellOrderKey);
+
+        let unitOnMarket = parseInt(sellOrder.unit);
+        unitOnMarket--;
+        sellOrder.setUnitOnMarket(unitOnMarket.toString());
+        sellOrder.setPartialFilled()
+
+        await ctx.tradeOrderList.updateOrder(sellOrder);
+        return sellOrder;
     }
 
     /**

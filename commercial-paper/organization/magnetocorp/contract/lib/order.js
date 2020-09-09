@@ -75,6 +75,11 @@ class TradeOrder extends State {
         this.currentState = orderState.CANCELLED;
     }
 
+    setUnitOnMarket(newUnit) {
+        this.unit = newUnit;
+    }
+
+
     isPartialFilled() {
         return this.currentState === orderState.PARTIALFILLED;
     }
