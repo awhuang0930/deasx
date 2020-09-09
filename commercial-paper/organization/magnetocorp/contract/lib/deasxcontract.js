@@ -96,6 +96,10 @@ class DeAsxContract extends Contract {
             return 'No trade is made, the type of orders are not matched.';
         }
 
+        if ( parseFloat(sellOrder.price) > parseFloat(buyOrder.price) ){
+            return 'No trade is made, the prices of orders are not matched.';
+        }
+
         if ( sellOrder.isFilled() || buyOrder.isFilled()){
             return 'No trade is made, order has been filled.';
         }
