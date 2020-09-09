@@ -97,13 +97,13 @@ class DeAsxContract extends Contract {
         }
 
         let tradePrice = (triggeredBy === "Seller" ) ? buyOrder.price : sellOrder.price;
-        let tradeUnit = Math.min(buyOrder.unitOnMarket, sellOrder.unitOnMarket)
+        let tradeUnit = partInt(Math.min(buyOrder.unitOnMarket, sellOrder.unitOnMarket));
 
         if ( buyOrder.unitOnMarket > sellOrder.unitOnMarket){
             buyOrder.setPartialFilled();
             sellOrder.setFilled();
             let unitOnMarket = parseInt(buyOrder.unitOnMarket);
-            unitOnMarket -= tradeUnit;
+            unitOnMarket = unitOnMarket - tradeUnit;
             buyOrder.setUnitOnMarket(unitOnMarket.toString());
             sellOrder.setUnitOnMarket('0');
         }else if (buyOrder.unitOnMarket === sellOrder.unitOnMarket){
@@ -115,7 +115,7 @@ class DeAsxContract extends Contract {
             sellOrder.setPartialFilled();
             buyOrder.setFilled();
             let unitOnMarket = parseInt(sellOrder.unitOnMarket);
-            unitOnMarket -= tradeUnit;
+            unitOnMarket = unitOnMarket - tradeUnit;
             sellOrder.setUnitOnMarket(unitOnMarket.toString());
             buyOrder.setUnitOnMarket('0');
         }
