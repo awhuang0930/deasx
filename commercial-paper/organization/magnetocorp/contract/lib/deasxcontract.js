@@ -70,7 +70,7 @@ class DeAsxContract extends Contract {
         return order;
     }
 
-    async transact(ctx, buyOrderId, sellOrderId, triggeredBy){
+    async transact(ctx, buyOrderId, sellOrderId){
         // Todo1 : In the appliation JS,
         //  after place an order
         // 1. lock this order
@@ -92,15 +92,25 @@ class DeAsxContract extends Contract {
         let buyOrderKey = TradeOrder.makeKey(['Order', buyOrderId]);
         let buyOrder = await ctx.tradeOrderList.getOrder(buyOrderKey);
 
+        if ( sellOrder.buyOrSell != 'Sell' || buyOrder.buyOrSell != 'Buy'){
+            return 'No trade is made, the type of orders are not matched.';
+        }
+
         if ( sellOrder.isFilled() || buyOrder.isFilled()){
-            return 'No trade is made, order has been filled';
+            return 'No trade is made, order has been filled.';
+        }
+
+        if ( sellOrder.isCancelled()|| buyOrder.isCancelled()){
+            return 'No trade is made, order has been cancelled.';
         }
 
         if ( sellOrder.stockCode !== buyOrder.stockCode ){
             return 'No trade is made, stockCode in the buy order is not same as the sell order one.';
         }
 
-        let tradePrice = (triggeredBy === "Seller" ) ? buyOrder.price : sellOrder.price;
+        let buyOrderPlaceTime = parseInt((new Date(buyOrder.orderTime)).getTime());
+        let sellOrderPlaceTime = parseInt((new Date(sellOrder.orderTime)).getTime());
+        let tradePrice = (sellOrderPlaceTime > buyOrderPlaceTime) ? buyOrder.price : sellOrder.price;
         let tradeUnit = parseInt(Math.min(buyOrder.unitOnMarket, sellOrder.unitOnMarket));
 
         let buyOrderUnitOnMarket = parseInt(buyOrder.unitOnMarket);
@@ -137,6 +147,15 @@ class DeAsxContract extends Contract {
      *
     */
     async cancelOrder(ctx, orderId) {
+        let orderKey = TradeOrder.makeKey(['Order', orderId]);
+        let order = await ctx.tradeOrderList.getOrder(orderKey);
+        if( order.isFilled){
+            return "Order has been filled."
+        }else{
+            order.setCancelled();
+            await ctx.tradeOrderList.putOrder(order);
+            return order;
+        }
     }
 }
 
