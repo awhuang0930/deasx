@@ -17,12 +17,11 @@ const TransactionList = require('./transactionlist.js');
  * A custom context provides easy access to list of all tradeOrder and transactions
  */
 class DeAsxContext extends Context {
-
     constructor() {
         super();
         // All orders are held in a list of trade orders
         this.tradeOrderList = new TradeOrderList(this);
-        this.transactionList = new 
+        this.transactionList = new TransactionList(this);
     }
 }
 
