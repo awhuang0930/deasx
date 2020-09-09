@@ -10,6 +10,8 @@ const { Contract, Context } = require('fabric-contract-api');
 // DeAsx specifc classes
 const TradeOrder = require('./order.js');
 const TradeOrderList = require('./orderlist.js');
+const Transaction = require('./transaction.js');
+const TransactionList = require('./transactionlist.js');
 
 /**
  * A custom context provides easy access to list of all tradeOrder and transactions
@@ -20,6 +22,7 @@ class DeAsxContext extends Context {
         super();
         // All orders are held in a list of trade orders
         this.tradeOrderList = new TradeOrderList(this);
+        this.transactionList = new 
     }
 }
 
@@ -68,7 +71,7 @@ class DeAsxContract extends Contract {
         return order;
     }
 
-    async transact(ctx, buyOrderId, sellOrderId){
+    async transact(ctx, buyOrderId, sellOrderId, triggeredBy){
         // Todo1 : In the appliation JS,
         //  after place an order
         // 1. lock this order
@@ -87,13 +90,42 @@ class DeAsxContract extends Contract {
         let sellOrderKey = TradeOrder.makeKey(['Order', sellOrderId]);
         let sellOrder = await ctx.tradeOrderList.getOrder(sellOrderKey);
 
-        let unitOnMarket = parseInt(sellOrder.unitOnMarket);
-        unitOnMarket--;
-        sellOrder.setUnitOnMarket(unitOnMarket.toString());
-        sellOrder.setPartialFilled()
+        let buyOrderKey = TradeOrder.makeKey(['Order', buyOrderId]);
+        let buyOrder = await ctx.tradeOrderList.getOrder(buyOrderKey);
 
+        if ( sellOrder.isFilled() || buyOrder.isFilled()){
+            return 'No trade made';
+        }
+
+        let tradePrice = (triggeredBy === "Seller" ) ? buyOrder.price : sellOrder.price;
+        let tradeUnit = Math.min(buyOrder.unitOnMarket, sellOrder.unitOnMarket)
+
+        if ( buyOrder.unitOnMarket > sellOrder.unitOnMarket){
+            buyOrder.setPartialFilled();
+            sellOrder.setFilled();
+            let unitOnMarket = parseInt(buyOrder.unitOnMarket);
+            unitOnMarket -= tradeUnit;
+            buyOrder.setUnitOnMarket(unitOnMarket.toString());
+            sellOrder.setUnitOnMarket('0');
+        }else if (buyOrder.unitOnMarket === sellOrder.unitOnMarket){
+            buyOrder.setFilled();
+            sellOrder.setFilled();
+            buyOrder.setUnitOnMarket('0');
+            sellOrder.setUnitOnMarket('0');
+        }else{ // buyOrder.unitOnMarket < sellOrder.unitOnMarket
+            sellOrder.setPartialFilled();
+            buyOder.setFilled();
+            let unitOnMarket = parseInt(sellOrder.unitOnMarket);
+            unitOnMarket -= tradeUnit;
+            sellOrder.setUnitOnMarket(unitOnMarket.toString());
+            buyOrder.setUnitOnMarket('0');
+        }
         await ctx.tradeOrderList.updateOrder(sellOrder);
-        return sellOrder;
+        await ctx.tradeOrderList.updateOrder(buyOrder);
+
+        let transaction = Transaction.createInstance(buyOrder.stockCode, tradeUnit, tradePrice, buyOrder.broker, sellOrder.broker);
+        await ctx.transactionList.addTransaction(transaction);
+        return transaction;
     }
 
     /**
