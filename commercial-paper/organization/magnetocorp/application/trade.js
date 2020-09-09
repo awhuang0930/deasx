@@ -70,7 +70,7 @@ async function main() {
         // process response
         console.log('Process issue transaction response.'+issueResponse);
 
-        let paper = TradeOrder.fromBuffer(issueResponse);
+        //let paper = TradeOrder.fromBuffer(issueResponse);
 
         //console.log(`${paper.issuer} commercial paper : ${paper.paperNumber} successfully issued for value ${paper.faceValue}`);
         console.log('Transaction complete.');

@@ -60,7 +60,7 @@ class TradeOrder extends State {
     }
 
     setPlaced() {
-        this.currentState = orderState.FILLED;
+        this.currentState = orderState.PLACED;
     }
 
     setPartialFilled() {
