@@ -7,6 +7,11 @@ SPDX-License-Identifier: Apache-2.0
 // Utility class for ledger state
 const State = require('./../ledger-api/state.js');
 
+const transactionState = {
+    COMPLETED: 1,
+    SETTLED: 2
+};
+
 /**
  * CommercialPaper class extends State class
  * Class will be used by application and smart contract to define a paper
@@ -16,6 +21,10 @@ class Transaction extends State {
     constructor(obj) {
         super(Transaction.getClass(), ['Transaction', obj.id]);
         Object.assign(this, obj);
+    }
+
+    setCompleted() {
+        this.currentState = transactionState.COMPLETED;
     }
 
     static fromBuffer(buffer) {

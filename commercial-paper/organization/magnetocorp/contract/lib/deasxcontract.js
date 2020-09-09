@@ -93,7 +93,11 @@ class DeAsxContract extends Contract {
         let buyOrder = await ctx.tradeOrderList.getOrder(buyOrderKey);
 
         if ( sellOrder.isFilled() || buyOrder.isFilled()){
-            return 'No trade made, order has been filled';
+            return 'No trade is made, order has been filled';
+        }
+
+        if ( sellOrder.stockCode !== buyOrder.stockCode ){
+            return 'No trade is made, stockCode in the buy order is not same as the sell order one.';
         }
 
         let tradePrice = (triggeredBy === "Seller" ) ? buyOrder.price : sellOrder.price;
@@ -123,6 +127,7 @@ class DeAsxContract extends Contract {
         await ctx.tradeOrderList.updateOrder(buyOrder);
 
         let transaction = Transaction.createInstance(buyOrder.stockCode, tradeUnit, tradePrice, buyOrder.broker, sellOrder.broker);
+        transaction.setCompleted();
         await ctx.transactionList.addTransaction(transaction);
         return transaction;
     }
