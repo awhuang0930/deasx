@@ -38,8 +38,8 @@ class Transaction extends State {
      * Factory method to create a commercial paper object
      */
     static createInstance(stockCode, unit, price, buyer, seller) {
-        let id = TradeOrder.createGuid();
-        let tradeTime = TradeOrder.formatDatetime(new Date());
+        let id = Transaction.createGuid();
+        let tradeTime = Transaction.formatDatetime(new Date());
         return new Transaction({ id, stockCode, unit, price, buyer, seller,tradeTime });
     }
 
