@@ -65,7 +65,7 @@ async function main() {
         // issue commercial paper
         console.log('Submit commercial paper issue transaction.');
 
-        const issueResponse = await contract.submitTransaction('transact','10002','8538e538-daee-348b-2642-64d76453aca7', 'Seller');
+        const issueResponse = await contract.submitTransaction('transact','8538e538-daee-348b-2642-64d76453aca7','40c1e3d5-d0cc-a17b-141f-910ebbe79cf9', 'Seller');
 
         // process response
         console.log('Process issue transaction response.'+issueResponse);
