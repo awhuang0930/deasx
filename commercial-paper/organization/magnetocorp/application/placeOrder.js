@@ -155,12 +155,12 @@ async function transactOnMarket(buyOrderId, sellOrderId) {
     }
 }
 
-async function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
+function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
 	console.log('stockCode:' + stockCode);
 	console.log(priceFilter);
 	console.log('buyOrSell:' + buyOrSell);
 
-    const response = await axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
+    const response = axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
         "selector": {
             "stockCode": stockCode,
             "class": "org.deasx.tradeOrder",
@@ -196,7 +196,7 @@ main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
 
     let priceFilter = orderObj.buyOrSell === 'Sell' ? { "$gte": orderObj.price.toString() } : { "$lte": orderObj.price.toString() };
     let matchingBuyOrSell = orderObj.buyOrSell === 'Sell' ? 'Buy' : 'Sell';
-    const ordersToMatch = await getProposeMatchingOrders(orderObj.stockCode, priceFilter, matchingBuyOrSell);
+    const ordersToMatch = getProposeMatchingOrders(orderObj.stockCode, priceFilter, matchingBuyOrSell);
     console.log(ordersToMatch);
 
     ordersToMatch.forEach( async o => {
