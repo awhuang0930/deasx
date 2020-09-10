@@ -197,6 +197,46 @@ function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
 
 };
 
+const getProposeMatchingOrders2 = async (stockCode, priceFilter, buyOrSell) => {
+	console.log('stockCode:' + stockCode);
+	console.log(priceFilter);
+	console.log('buyOrSell:' + buyOrSell);
+
+    try{
+        const response = await axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
+            "selector": {
+                "stockCode": stockCode,
+                "class": "org.deasx.tradeOrder",
+                "buyOrSell": buyOrSell,
+                "price": priceFilter,
+                "currentState": {
+                    "$or": [1, 2]
+                }
+            },
+            "fields": [
+                "id",
+                "unitOnMarket",
+                "currentState"
+            ],
+            "sort": [{ "price": "desc" }],
+            "limit": 50
+        });
+
+        return response.data.docs.map(d=>{
+            return {
+                id : d.id,
+                unitOnMarket : d.unitOnMarket
+            }});
+
+    }
+    catch(error) {
+    // handle error
+       console.log(error);
+    };
+};
+
+
+
 
 main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
     console.log('Place order complete.');
@@ -204,8 +244,10 @@ main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
 
     let priceFilter = orderObj.buyOrSell === 'Sell' ? { "$gte": orderObj.price.toString() } : { "$lte": orderObj.price.toString() };
     let matchingBuyOrSell = orderObj.buyOrSell === 'Sell' ? 'Buy' : 'Sell';
-    getProposeMatchingOrders(orderObj.stockCode, priceFilter, matchingBuyOrSell)
-            .then( matchedOrderList => {
+
+    const matchedOrderList = await getProposeMatchingOrders2(orderObj.stockCode, priceFilter, matchingBuyOrSell);
+    // getProposeMatchingOrders(orderObj.stockCode, priceFilter, matchingBuyOrSell)
+    //         .then( matchedOrderList => {
                 console.log(matchedOrderList);
                 matchedOrderList.forEach( async matchedOrder => {
                     let sellOrderId = orderObj.buyOrSell === 'Sell' ? orderObj.id : matchedOrder.id;
@@ -220,8 +262,8 @@ main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
                     // }).catch( (e) => {
                     //     console.log("Transaction on Market error.")
                     // });        
-            });     
-    }).catch((e) => {
+    //         });     
+    // }).catch((e) => {
         console.log('Issue program exception.');
         console.log(e);
         console.log(e.stack);
