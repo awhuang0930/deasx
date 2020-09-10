@@ -90,7 +90,7 @@ async function main(buyOrSell, stockCode, price, orderUnit) {
 }
 
 // Main program function
-async function transactOnMarket(buyOrSell, stockCode, price, orderId) {
+async function transactOnMarket(buyOrderId, sellOrderId) {
     // A gateway defines the peers used to access Fabric networks
     const gateway = new Gateway();
 
@@ -133,25 +133,13 @@ async function transactOnMarket(buyOrSell, stockCode, price, orderId) {
         // 2. tranaction against to the list matching orders
         // 3. after the potential transaction completed, if the Unit still remained 
         //    unlock the order and leave it on the market
-        let priceFilter = buyOrSell === 'Sell' ? { "$gte": price.toString() } : { "$lte": price.toString() };
-        let matchingBuyOrSell = buyOrSell === 'Sell' ? 'Buy' : 'Sell';
+        const txnResponse = await contract.submitTransaction('transact', buyOrderId, sellOrderId);          
+        return txnResponse;
 
-        const ordersToMatch = await getProposeMatchingOrders(stockCode, priceFilter, matchingBuyOrSell);
-	console.log(ordersToMatch);
-
-        ordersToMatch.forEach( async o => {
-            let sellOrderId = buyOrSell === 'Sell' ? orderId : o.id;
-            let buyOrderId = buyOrSell === 'Buy' ?  orderId : o.id;
-            console.log("Start matching order");
-            console.log(`Buy order id: ${buyOrderId}`);
-            console.log(`Sell order id:${sellOrderId}`);
-            const txnResponse = await contract.submitTransaction('transact', buyOrderId, sellOrderId);          
-            console.log("Process transaction resposnse: " + txnResponse);
-        })
         //let paper = TradeOrder.fromBuffer(issueResponse);
 
         //console.log(`${paper.issuer} commercial paper : ${paper.paperNumber} successfully issued for value ${paper.faceValue}`);
-        console.log('Transaction complete.');
+        //console.log('Transaction complete.');
 
     } catch (error) {
 
@@ -204,14 +192,25 @@ async function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
 
 
 main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
-    
     console.log('Place order complete.');
-    transactOnMarket(orderObj.buyOrSell, orderObj.stockCode, orderObj.price, orderObj.id).then(() => {
-        console.log("trade on market completed.")
-    }).catch( (e) => {
-        console.log("Transaction on Market error.")
-    })
 
+    let priceFilter = orderObj.buyOrSell === 'Sell' ? { "$gte": orderObj.price.toString() } : { "$lte": orderObj.price.toString() };
+    let matchingBuyOrSell = orderObj.buyOrSell === 'Sell' ? 'Buy' : 'Sell';
+    const ordersToMatch = await getProposeMatchingOrders(orderObj.stockCode, priceFilter, matchingBuyOrSell);
+    console.log(ordersToMatch);
+
+    ordersToMatch.forEach( async o => {
+        let sellOrderId = orderObj.buyOrSell === 'Sell' ? orderObj.id : o.id;
+        let buyOrderId = orderObj.buyOrSell === 'Buy' ?  orderObj.id : o.id;
+        console.log("Start matching order");
+        console.log(`Buy order id: ${buyOrderId}`);
+        console.log(`Sell order id:${sellOrderId}`);
+        const txnResponse = transactOnMarket(buyOrderId, sellOrderId).then(() => {
+            console.log("Process transact on market resposnse: " + txnResponse);
+        }).catch( (e) => {
+            console.log("Transaction on Market error.")
+        })       
+    })
 }).catch((e) => {
     console.log('Issue program exception.');
     console.log(e);
