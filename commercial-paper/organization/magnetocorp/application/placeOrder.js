@@ -160,7 +160,7 @@ function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
 	console.log(priceFilter);
 	console.log('buyOrSell:' + buyOrSell);
 
-    await axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
+    axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
         "selector": {
             "stockCode": stockCode,
             "class": "org.deasx.tradeOrder",
@@ -205,10 +205,10 @@ main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
 
     let priceFilter = orderObj.buyOrSell === 'Sell' ? { "$gte": orderObj.price.toString() } : { "$lte": orderObj.price.toString() };
     let matchingBuyOrSell = orderObj.buyOrSell === 'Sell' ? 'Buy' : 'Sell';
-    const ordersToMatch = getProposeMatchingOrders(orderObj.stockCode, priceFilter, matchingBuyOrSell);
-    console.log(ordersToMatch);
+    getProposeMatchingOrders(orderObj.stockCode, priceFilter, matchingBuyOrSell)
+		.then( matchorder => {
+			console.log(order);
 
-    ordersToMatch.forEach( async o => {
         let sellOrderId = orderObj.buyOrSell === 'Sell' ? orderObj.id : o.id;
         let buyOrderId = orderObj.buyOrSell === 'Buy' ?  orderObj.id : o.id;
         console.log("Start matching order");
@@ -219,7 +219,8 @@ main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
         }).catch( (e) => {
             console.log("Transaction on Market error.")
         })       
-    })
+		});
+
 }).catch((e) => {
     console.log('Issue program exception.');
     console.log(e);
