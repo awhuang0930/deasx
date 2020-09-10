@@ -1,0 +1,107 @@
+# Update <REGISTRY> <NAMESPACE> values before use
+# Replace app name instead of get-started-aspnet if you wish to use different name for your app
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: reactstore-server 
+ labels:
+   app: reactstore-server
+spec:
+ replicas: 2
+ selector:
+   matchLabels:
+     app: reactstore-server
+ template:
+   metadata:
+     labels:
+       app: reactstore-server
+   spec:
+    containers:
+    -   name: reactstore-server
+        image: awhuang0930/reactstore-serverruntime:v1.0
+        ports:
+        - containerPort: 8000
+        imagePullPolicy: Always 
+    imagePullSecrets:
+    -   name: hubcred
+---
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: reactserver-load-balancer
+      labels:
+        app: reactserver
+    spec:
+      type: ClusterIP
+      ports:
+        - protocol: TCP
+          port: 90
+          targetPort: 8000
+          name: http
+      selector:
+        app: reactstore-server 
+
+
+# To deploy
+# open bash with administrator right
+# ensure minikube is started, or run: $ minikube start
+
+# $ kubectl apply -f deployment.yaml
+# To Update Pods
+# $ kubectl get pods
+# $ kubectl delete pod <podName> --force
+
+# To check servie running
+# Open terminal(bash) with administrator right
+# minikube service list
+
+# After deployment
+# To Use NopApi
+# Open the url(target port) in the service list in browser like:
+# http://10.0.0.225:30290/graphql
+
+# good learning:
+# https://kubernetes.io/docs/setup/learning-environment/minikube/
+# https://kubernetes.io/docs/concepts/services-networking/service/
+
+# For push image to local and use it in minikube, read following:
+# https://dzone.com/articles/running-local-docker-images-in-kubernetes-1
+# 
+# Quick Note for push docker image in minikube, it will help you avoid pushing 100+MB file to docker hub and getting it back.
+# Step 1:
+# Open terminal(bash) with administrator right
+# ~~~~
+# minikube service list
+# ~~~~
+# above will configure the docker environment for the shell
+# you wil find the docker host is with minikube by:
+# ~~~~
+# docker image list
+# ~~~~
+
+# Step 2:
+# go into minikube by:
+# ~~~~
+# minikube ssh
+# ~~~~
+#
+# Build docker image to local minikube by:
+# ~~~~
+# docker build -f Dockerfiles/Server/Dockerfile -t reactstore-server:v1.0 .
+# ~~~~
+# then you will find the docker image in the minikube 
+# finally, you can apply the deployment to minikube
+
+# to test the ReactStore Server site test following by visiting browser  http://10.0.0.219:30174/graphql
+# mutation {
+#   heartbeatadd(uri:"http://10.0.0.219:31460"){
+#     id,
+#     logLevelId,
+#     shortMessage,
+#     fullMessage
+#   }
+# }
+
+
+
