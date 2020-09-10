@@ -71,8 +71,6 @@ class DeAsxContract extends Contract {
     }
 
     async transact(ctx, buyOrderId, sellOrderId){
-
-
         // Todo2: Here
         // 1. Retrive 2 orders and validate them.
         // 2. Update the 2 order accordingly.

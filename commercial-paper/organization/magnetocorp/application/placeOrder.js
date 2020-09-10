@@ -26,8 +26,7 @@ const TradeOrder = require('../contract/lib/order.js');
 const wallet = new FileSystemWallet('../identity/user/isabella/wallet');
 
 // Main program function
-async function main() {
-
+async function main(buyOrSell, stockCode, price, orderUnit) {
     // A gateway defines the peers used to access Fabric networks
     const gateway = new Gateway();
 
@@ -66,20 +65,75 @@ async function main() {
         // issue commercial paper
         console.log('Submit commercial paper issue transaction.');
 
-        let buyOrSell = 'Sell';
-        let stockCode = 'ANZ';
-        let price = '32.10';
-        let orderUnit = '8';
+        // let buyOrSell = 'Sell';
+        // let stockCode = 'ANZ';
+        // let price = '32.10';
+        // let orderUnit = '8';
         let orderId = '';
         const orderResponse = await contract.submitTransaction('placeOrder','YvonneCorp',stockCode, orderUnit, price, buyOrSell);
         // process response
-        console.log('Process issue transaction response:  ' + orderResponse);
+        console.log('Process place order response:  ' + orderResponse);
         if (typeof orderResponse === 'object' && orderResponse !== null){
-            orderId = orderResponse.id;
+            //orderId = orderResponse.id;
+            let orderObj = JSON.parse(orderResponse);
+            return orderObj;
         }else{
-            return;
+            return null;
         }
 
+    } catch (error) {
+
+        console.log(`Error processing transaction. ${error}`);
+        console.log(error.stack);
+
+    } finally {
+
+        // Disconnect from the gateway
+        console.log('Disconnect from Fabric gateway.');
+        gateway.disconnect();
+
+    }
+}
+
+// Main program function
+async function transactOnMarket(buyOrSell, stockCode, price, orderId) {
+    // A gateway defines the peers used to access Fabric networks
+    const gateway = new Gateway();
+
+    // Main try/catch block
+    try {
+
+        // Specify userName for network access
+        // const userName = 'isabella.issuer@magnetocorp.com';
+        const userName = 'User1@org1.example.com';
+
+        // Load connection profile; will be used to locate a gateway
+        let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/networkConnection.yaml', 'utf8'));
+
+        // Set connection options; identity and wallet
+        let connectionOptions = {
+            identity: userName,
+            wallet: wallet,
+            discovery: { enabled:false, asLocalhost: true }
+        };
+
+        // Connect to gateway using application specified parameters
+        console.log('Connect to Fabric gateway.');
+
+        await gateway.connect(connectionProfile, connectionOptions);
+
+        // Access PaperNet network
+        console.log('Use network channel: mychannel.');
+
+        const network = await gateway.getNetwork('mychannel');
+
+        // Get addressability to commercial paper contract
+        console.log('Use org.deasx smart contract.');
+
+        const contract = await network.getContract('deasxcontract');
+
+        // issue commercial paper
+        console.log('Submit transact transaction.');
         //  after place an order
         // 1. Get the list of protential matching orders
         // 2. tranaction against to the list matching orders
@@ -162,15 +216,18 @@ async function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
         });
 };
 
-main().then(() => {
-
-    console.log('Issue program complete.');
+main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
+    
+    console.log('Place order complete.');
+    transactOnMarket(orderObj.buyOrSell, orderObj.stockCode, orderObj.price, orderObj.id).then(() => {
+        console.log("trade on market completed.")
+    }).catch( (e) => {
+        console.log("Transaction on Market error.")
+    })
 
 }).catch((e) => {
-
     console.log('Issue program exception.');
     console.log(e);
     console.log(e.stack);
     process.exit(-1);
-
 });
