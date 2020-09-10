@@ -160,7 +160,7 @@ function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
 	console.log(priceFilter);
 	console.log('buyOrSell:' + buyOrSell);
 
-    axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
+    return axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
         "selector": {
             "stockCode": stockCode,
             "class": "org.deasx.tradeOrder",
@@ -192,16 +192,15 @@ function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
     })
     .catch(function (error) {
     // handle error
-    //console.log(error);
-    })
-    .then(function () {
-    // always executed
-    }); 
+       console.log(error);
+    });
+
 };
 
 
 main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
     console.log('Place order complete.');
+    console.log(orderObj);
 
     let priceFilter = orderObj.buyOrSell === 'Sell' ? { "$gte": orderObj.price.toString() } : { "$lte": orderObj.price.toString() };
     let matchingBuyOrSell = orderObj.buyOrSell === 'Sell' ? 'Buy' : 'Sell';
