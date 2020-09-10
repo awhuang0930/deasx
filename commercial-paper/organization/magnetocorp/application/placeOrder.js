@@ -160,7 +160,7 @@ async function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
 	console.log(priceFilter);
 	console.log('buyOrSell:' + buyOrSell);
 
-    axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
+    await axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
         "selector": {
             "stockCode": stockCode,
             "class": "org.deasx.tradeOrder",
