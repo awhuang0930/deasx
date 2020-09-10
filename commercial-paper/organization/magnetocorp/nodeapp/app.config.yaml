@@ -1,7 +1,0 @@
-AppConfig:
-  #RestApiUriBase: "http://10.0.0.225:30253"
-  RestApiUriBase: "http://localhost:52894"
-  # RestApiUriBase: 'http://nopapi.aoma.com.au'
-  # RestApiUriBase: 'http://nopapi-service.default.svc.cluster.local:90'
-  JwtSecretKey: "aoma001"
-

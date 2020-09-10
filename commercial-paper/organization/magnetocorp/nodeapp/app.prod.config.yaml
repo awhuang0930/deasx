@@ -1,4 +1,0 @@
-AppConfig:
-  RestApiUriBase: 'http://nopapi-service.default.svc.cluster.local:90'
-  JwtSecretKey: "aoma001"
-
