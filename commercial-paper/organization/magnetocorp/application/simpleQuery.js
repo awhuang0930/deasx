@@ -37,7 +37,7 @@ axios.post('http://192.168.171.216:5984/mychannel_deasxcontract/_find',{
                 unitOnMarket : d.unitOnMarket
             };
     });
-    console.log(response.data.docs);
+    //console.log(response.data.docs);
     console.log(result);
   })
   .catch(function (error) {

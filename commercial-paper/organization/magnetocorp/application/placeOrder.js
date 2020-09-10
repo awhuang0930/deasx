@@ -17,6 +17,7 @@ SPDX-License-Identifier: Apache-2.0
 // Bring key classes into scope, most importantly Fabric SDK network class
 const fs = require('fs');
 const yaml = require('js-yaml');
+const axios = require('axios');
 const { FileSystemWallet, Gateway } = require('fabric-network');
 const TradeOrder = require('../contract/lib/order.js');
 
@@ -65,11 +66,39 @@ async function main() {
         // issue commercial paper
         console.log('Submit commercial paper issue transaction.');
 
-        const tradeResponse = await contract.submitTransaction('placeOrder','YvonneCorp','ANZ', '8', '32.10', 'Sell');
-
+        let buyOrSell = 'Sell';
+        let stockCode = 'ANZ';
+        let price = '32.10';
+        let orderUnit = '8';
+        let orderId = '';
+        const orderResponse = await contract.submitTransaction('placeOrder','YvonneCorp',stockCode, orderUnit, price, buyOrSell);
         // process response
-        console.log('Process issue transaction response:  ' + issueResponse);
+        console.log('Process issue transaction response:  ' + orderResponse);
+        if (typeof orderResponse === 'object' && orderResponse !== null){
+            orderId = orderResponse.id;
+        }else{
+            return;
+        }
 
+        //  after place an order
+        // 1. Get the list of protential matching orders
+        // 2. tranaction against to the list matching orders
+        // 3. after the potential transaction completed, if the Unit still remained 
+        //    unlock the order and leave it on the market
+        let priceFilter = buyOrSell === 'Sell' ? { "$gte": price.toString() } : { "$lte": price.toString() };
+        let matchingBuyOrSell = buyOrSell === 'Sell' ? 'Buy' : 'Sell';
+
+        const ordersToMatch = getProposeMatchingOrders(stockCode, priceFilter, matchingBuyOrSell);
+
+        ordersToMatch.forEach( o => {
+            let sellOrderId = buyOrSell === 'Sell' ? orderId : o.id;
+            let buyOrderId = buyOrSell === 'Buy' ?  orderId : o.id;
+            console.log("Start matching order");
+            console.log(`Buy order id: ${buyOrderId}`);
+            console.log(`Sell order id:${sellOrderId}`);
+            const txnResponse = await contract.submitTransaction('transact', buyOrderId,sellOrderId);          
+            console.log("Process transaction resposnse: " + txnResponse);
+        })
         //let paper = TradeOrder.fromBuffer(issueResponse);
 
         //console.log(`${paper.issuer} commercial paper : ${paper.paperNumber} successfully issued for value ${paper.faceValue}`);
@@ -88,6 +117,51 @@ async function main() {
 
     }
 }
+
+async function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
+    let stockCode = 'ANZ';
+    let askPrice = 42.00;
+    let priceFilter = { "$gt": askPrice.toString() }
+
+    // Make a request for a user with a given ID
+    axios.post('http://192.168.171.216:5984/mychannel_deasxcontract/_find', {
+        "selector": {
+            "stockCode": stockCode,
+            "class": "org.deasx.tradeOrder",
+            "buyOrSell": buyOrSell,
+            "price": priceFilter,
+            "currentState": {
+                "$or": [1, 2]
+            }
+        },
+        "fields": [
+            "id",
+            "unitOnMarket",
+            "currentState"
+        ],
+        "sort": [{ "price": "desc" }],
+        "limit": 50
+    })
+        .then(function (response) {
+            // handle success
+            let result = response.data.docs.map(d => {
+                return {
+                    id: d.id,
+                    unitOnMarket: d.unitOnMarket
+                };
+            });
+            //console.log(response.data.docs);
+            return result;
+        })
+        .catch(function (error) {
+            // handle error
+            //console.log(error);
+        })
+        .then(function () {
+            // always executed
+        });
+};
+
 main().then(() => {
 
     console.log('Issue program complete.');
