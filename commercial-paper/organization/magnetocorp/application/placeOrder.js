@@ -64,13 +64,6 @@ async function main(buyOrSell, stockCode, price, orderUnit) {
 
         // issue commercial paper
         console.log('Submit commercial paper issue transaction.');
-
-<<<<<<< HEAD
-        // let buyOrSell = 'Sell';
-        // let stockCode = 'ANZ';
-        // let price = '32.10';
-        // let orderUnit = '8';
-        let orderId = '';
         const orderResponse = await contract.submitTransaction('placeOrder','YvonneCorp',stockCode, orderUnit, price, buyOrSell);
         // process response
         console.log('Process place order response:  ' + orderResponse);
@@ -78,20 +71,6 @@ async function main(buyOrSell, stockCode, price, orderUnit) {
             //orderId = orderResponse.id;
             let orderObj = JSON.parse(orderResponse);
             return orderObj;
-=======
-        let buyOrSell = 'Sell';
-        let stockCode = 'ANZ';
-        let price = '52.10';
-        let orderUnit = '78';
-        let orderId = '';
-        const orderResponse = await contract.submitTransaction('placeOrder','YvonneCorp',stockCode, orderUnit, price, buyOrSell);
-        // process response
-        console.log('Process place order transaction response:  ' + orderResponse);
-        if (typeof orderResponse === 'object' && orderResponse !== null){
-	    let tradeObj = JSON.parse(orderResponse);
-            //console.log("orderResponse.id:" + tradeObj.id);
-            orderId = tradeObj.id;
->>>>>>> 84677848bf72326591f9a8317fc93a29177c4455
         }else{
             return null;
         }
