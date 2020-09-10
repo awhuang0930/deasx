@@ -135,11 +135,6 @@ async function transactOnMarket(buyOrderId, sellOrderId) {
         gateway.disconnect();
         return txnResponse;
 
-        //let paper = TradeOrder.fromBuffer(issueResponse);
-
-        //console.log(`${paper.issuer} commercial paper : ${paper.paperNumber} successfully issued for value ${paper.faceValue}`);
-        //console.log('Transaction complete.');
-
     } catch (error) {
 
         console.log(`Error processing transaction. ${error}`);
@@ -147,48 +142,6 @@ async function transactOnMarket(buyOrderId, sellOrderId) {
 
     };
 }
-
-// function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
-//     console.log('stockCode:' + stockCode);
-//     console.log(priceFilter);
-//     console.log('buyOrSell:' + buyOrSell);
-
-//     return axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
-//         "selector": {
-//             "stockCode": stockCode,
-//             "class": "org.deasx.tradeOrder",
-//             "buyOrSell": buyOrSell,
-//             "price": priceFilter,
-//             "currentState": {
-//                 "$or": [1, 2]
-//             }
-//         },
-//         "fields": [
-//             "id",
-//             "unitOnMarket",
-//             "currentState"
-//         ],
-//         "sort": [{ "price": "desc" }],
-//         "limit": 50
-//     })
-//         .then(function (response) {
-//             // handle success
-//             let result = response.data.docs.map(d => {
-//                 return {
-//                     id: d.id,
-//                     unitOnMarket: d.unitOnMarket
-//                 };
-//             });
-//             //console.log(response.data.docs);
-//             //console.log(result);
-//             return result;
-//         })
-//         .catch(function (error) {
-//             // handle error
-//             console.log(error);
-//         });
-
-// };
 
 const getProposeMatchingOrders = async (stockCode, priceFilter, buyOrSell) => {
     console.log('stockCode:' + stockCode);
@@ -229,9 +182,6 @@ const getProposeMatchingOrders = async (stockCode, priceFilter, buyOrSell) => {
     };
 };
 
-
-
-
 main('Sell', 'ANZ', '72.10', '88').then(async (orderObj) => {
     console.log('Place order complete.');
     console.log(orderObj);
@@ -246,7 +196,6 @@ main('Sell', 'ANZ', '72.10', '88').then(async (orderObj) => {
 
     const matchedOrderList = await getProposeMatchingOrders(orderObj.stockCode, priceFilter, matchingBuyOrSell);
     console.log(matchedOrderList);
-    //matchedOrderList.forEach(async matchedOrder => {
     for ( const matchedOrder of matchedOrderList){
         let sellOrderId = orderObj.buyOrSell === 'Sell' ? orderObj.id : matchedOrder.id;
         let buyOrderId = orderObj.buyOrSell === 'Buy' ? orderObj.id : matchedOrder.id;
@@ -256,5 +205,4 @@ main('Sell', 'ANZ', '72.10', '88').then(async (orderObj) => {
         const txnResponse = await transactOnMarket(buyOrderId, sellOrderId);
         console.log("Process transact on market resposnse: " + txnResponse);
     }
-    //});
 });
