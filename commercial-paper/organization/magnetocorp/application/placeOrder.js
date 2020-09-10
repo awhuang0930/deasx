@@ -207,7 +207,7 @@ main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
     getProposeMatchingOrders(orderObj.stockCode, priceFilter, matchingBuyOrSell)
             .then( matchedOrderList => {
                 console.log(matchedOrderList);
-                matchedOrderList.forEach( matchOrder => {
+                matchedOrderList.forEach( matchedOrder => {
                     let sellOrderId = orderObj.buyOrSell === 'Sell' ? orderObj.id : matchedOrder.id;
                     let buyOrderId = orderObj.buyOrSell === 'Buy' ?  orderObj.id : matchedOrder.id;
                     console.log("Start matching order");
