@@ -206,19 +206,18 @@ main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
     let priceFilter = orderObj.buyOrSell === 'Sell' ? { "$gte": orderObj.price.toString() } : { "$lte": orderObj.price.toString() };
     let matchingBuyOrSell = orderObj.buyOrSell === 'Sell' ? 'Buy' : 'Sell';
     getProposeMatchingOrders(orderObj.stockCode, priceFilter, matchingBuyOrSell)
-		.then( matchorder => {
-			console.log(order);
-
-        let sellOrderId = orderObj.buyOrSell === 'Sell' ? orderObj.id : o.id;
-        let buyOrderId = orderObj.buyOrSell === 'Buy' ?  orderObj.id : o.id;
-        console.log("Start matching order");
-        console.log(`Buy order id: ${buyOrderId}`);
-        console.log(`Sell order id:${sellOrderId}`);
-        const txnResponse = transactOnMarket(buyOrderId, sellOrderId).then(() => {
-            console.log("Process transact on market resposnse: " + txnResponse);
-        }).catch( (e) => {
-            console.log("Transaction on Market error.")
-        })       
+		.then( matchedOrder => {
+			console.log(matchedOrder);
+            let sellOrderId = orderObj.buyOrSell === 'Sell' ? orderObj.id : matchedOrder.id;
+            let buyOrderId = orderObj.buyOrSell === 'Buy' ?  orderObj.id : matchedOrder.id;
+            console.log("Start matching order");
+            console.log(`Buy order id: ${buyOrderId}`);
+            console.log(`Sell order id:${sellOrderId}`);
+            const txnResponse = transactOnMarket(buyOrderId, sellOrderId).then(() => {
+                console.log("Process transact on market resposnse: " + txnResponse);
+            }).catch( (e) => {
+                console.log("Transaction on Market error.")
+            })       
 		});
 
 }).catch((e) => {
