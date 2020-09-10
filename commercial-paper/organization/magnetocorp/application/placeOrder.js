@@ -246,7 +246,8 @@ main('Sell', 'ANZ', '72.10', '88').then(async (orderObj) => {
 
     const matchedOrderList = await getProposeMatchingOrders(orderObj.stockCode, priceFilter, matchingBuyOrSell);
     console.log(matchedOrderList);
-    matchedOrderList.forEach(async matchedOrder => {
+    //matchedOrderList.forEach(async matchedOrder => {
+    for ( const matchedOrder of matchedOrderList){
         let sellOrderId = orderObj.buyOrSell === 'Sell' ? orderObj.id : matchedOrder.id;
         let buyOrderId = orderObj.buyOrSell === 'Buy' ? orderObj.id : matchedOrder.id;
         console.log("Start matching order");
@@ -254,6 +255,6 @@ main('Sell', 'ANZ', '72.10', '88').then(async (orderObj) => {
         console.log(`Sell order id:${sellOrderId}`);
         const txnResponse = await transactOnMarket(buyOrderId, sellOrderId);
         console.log("Process transact on market resposnse: " + txnResponse);
-
-    });
+    }
+    //});
 });
