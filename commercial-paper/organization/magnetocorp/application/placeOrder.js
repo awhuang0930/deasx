@@ -238,7 +238,7 @@ const getProposeMatchingOrders2 = async (stockCode, priceFilter, buyOrSell) => {
 
 
 
-main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
+main('Sell', 'ANZ', '72.10', '88').then(async (orderObj) => {
     console.log('Place order complete.');
     console.log(orderObj);
 
@@ -264,9 +264,9 @@ main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
                     // });        
     //         });     
     // }).catch((e) => {
-        console.log('Issue program exception.');
-        console.log(e);
-        console.log(e.stack);
-        process.exit(-1);
+        //console.log('Issue program exception.');
+        //console.log(e);
+        //console.log(e.stack);
+        //process.exit(-1);
     });
 });
