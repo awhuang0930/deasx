@@ -44,7 +44,7 @@ async function main(buyOrSell, stockCode, price, orderUnit) {
         let connectionOptions = {
             identity: userName,
             wallet: wallet,
-            discovery: { enabled:false, asLocalhost: true }
+            discovery: { enabled: false, asLocalhost: true }
         };
 
         // Connect to gateway using application specified parameters
@@ -64,14 +64,14 @@ async function main(buyOrSell, stockCode, price, orderUnit) {
 
         // issue commercial paper
         console.log('Submit commercial paper issue transaction.');
-        const orderResponse = await contract.submitTransaction('placeOrder','YvonneCorp',stockCode, orderUnit, price, buyOrSell);
+        const orderResponse = await contract.submitTransaction('placeOrder', 'YvonneCorp', stockCode, orderUnit, price, buyOrSell);
         // process response
         console.log('Process place order response:  ' + orderResponse);
-        if (typeof orderResponse === 'object' && orderResponse !== null){
+        if (typeof orderResponse === 'object' && orderResponse !== null) {
             //orderId = orderResponse.id;
             let orderObj = JSON.parse(orderResponse);
             return orderObj;
-        }else{
+        } else {
             return null;
         }
 
@@ -108,7 +108,7 @@ async function transactOnMarket(buyOrderId, sellOrderId) {
         let connectionOptions = {
             identity: userName,
             wallet: wallet,
-            discovery: { enabled:false, asLocalhost: true }
+            discovery: { enabled: false, asLocalhost: true }
         };
 
         // Connect to gateway using application specified parameters
@@ -128,12 +128,11 @@ async function transactOnMarket(buyOrderId, sellOrderId) {
 
         // issue commercial paper
         console.log('Submit transact transaction.');
-        //  after place an order
-        // 1. Get the list of protential matching orders
-        // 2. tranaction against to the list matching orders
-        // 3. after the potential transaction completed, if the Unit still remained 
-        //    unlock the order and leave it on the market
-        const txnResponse = await contract.submitTransaction('transact', buyOrderId, sellOrderId);          
+
+        const txnResponse = await contract.submitTransaction('transact', buyOrderId, sellOrderId);
+        // Disconnect from the gateway
+        console.log('Disconnect from Fabric gateway.');
+        gateway.disconnect();
         return txnResponse;
 
         //let paper = TradeOrder.fromBuffer(issueResponse);
@@ -146,63 +145,57 @@ async function transactOnMarket(buyOrderId, sellOrderId) {
         console.log(`Error processing transaction. ${error}`);
         console.log(error.stack);
 
-    } finally {
-
-        // Disconnect from the gateway
-        console.log('Disconnect from Fabric gateway.');
-        gateway.disconnect();
-
-    }
+    };
 }
 
-function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
-	console.log('stockCode:' + stockCode);
-	console.log(priceFilter);
-	console.log('buyOrSell:' + buyOrSell);
+// function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
+//     console.log('stockCode:' + stockCode);
+//     console.log(priceFilter);
+//     console.log('buyOrSell:' + buyOrSell);
 
-    return axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
-        "selector": {
-            "stockCode": stockCode,
-            "class": "org.deasx.tradeOrder",
-            "buyOrSell": buyOrSell,
-            "price": priceFilter,
-            "currentState": {
-                "$or": [1, 2]
-            }
-        },
-        "fields": [
-            "id",
-            "unitOnMarket",
-            "currentState"
-        ],
-        "sort": [{ "price": "desc" }],
-        "limit": 50
-    })
-    .then(function (response) {
-        // handle success
-        let result = response.data.docs.map(d=>{
-                return {
-                    id : d.id,
-                    unitOnMarket : d.unitOnMarket
-                };
-        });
-        //console.log(response.data.docs);
-        //console.log(result);
-        return result;
-    })
-    .catch(function (error) {
-    // handle error
-       console.log(error);
-    });
+//     return axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
+//         "selector": {
+//             "stockCode": stockCode,
+//             "class": "org.deasx.tradeOrder",
+//             "buyOrSell": buyOrSell,
+//             "price": priceFilter,
+//             "currentState": {
+//                 "$or": [1, 2]
+//             }
+//         },
+//         "fields": [
+//             "id",
+//             "unitOnMarket",
+//             "currentState"
+//         ],
+//         "sort": [{ "price": "desc" }],
+//         "limit": 50
+//     })
+//         .then(function (response) {
+//             // handle success
+//             let result = response.data.docs.map(d => {
+//                 return {
+//                     id: d.id,
+//                     unitOnMarket: d.unitOnMarket
+//                 };
+//             });
+//             //console.log(response.data.docs);
+//             //console.log(result);
+//             return result;
+//         })
+//         .catch(function (error) {
+//             // handle error
+//             console.log(error);
+//         });
 
-};
+// };
 
-const getProposeMatchingOrders2 = async (stockCode, priceFilter, buyOrSell) => {
-	console.log('stockCode:' + stockCode);
-	console.log(priceFilter);
-	console.log('buyOrSell:' + buyOrSell);
+const getProposeMatchingOrders = async (stockCode, priceFilter, buyOrSell) => {
+    console.log('stockCode:' + stockCode);
+    console.log(priceFilter);
+    console.log('buyOrSell:' + buyOrSell);
 
-    try{
+    try {
         const response = await axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
             "selector": {
                 "stockCode": stockCode,
@@ -222,16 +215,17 @@ const getProposeMatchingOrders2 = async (stockCode, priceFilter, buyOrSell) => {
             "limit": 50
         });
 
-        return response.data.docs.map(d=>{
+        return response.data.docs.map(d => {
             return {
-                id : d.id,
-                unitOnMarket : d.unitOnMarket
-            }});
+                id: d.id,
+                unitOnMarket: d.unitOnMarket
+            }
+        });
 
     }
-    catch(error) {
-    // handle error
-       console.log(error);
+    catch (error) {
+        // handle error
+        console.log(error);
     };
 };
 
@@ -242,31 +236,24 @@ main('Sell', 'ANZ', '72.10', '88').then(async (orderObj) => {
     console.log('Place order complete.');
     console.log(orderObj);
 
+    //  after place an order
+    // 1. Get the list of protential matching orders
+    // 2. tranaction against to the list matching orders
+    // 3. after the potential transaction completed, if the Unit still remained 
+
     let priceFilter = orderObj.buyOrSell === 'Sell' ? { "$gte": orderObj.price.toString() } : { "$lte": orderObj.price.toString() };
     let matchingBuyOrSell = orderObj.buyOrSell === 'Sell' ? 'Buy' : 'Sell';
 
-    const matchedOrderList = await getProposeMatchingOrders2(orderObj.stockCode, priceFilter, matchingBuyOrSell);
-    // getProposeMatchingOrders(orderObj.stockCode, priceFilter, matchingBuyOrSell)
-    //         .then( matchedOrderList => {
-                console.log(matchedOrderList);
-                matchedOrderList.forEach( async matchedOrder => {
-                    let sellOrderId = orderObj.buyOrSell === 'Sell' ? orderObj.id : matchedOrder.id;
-                    let buyOrderId = orderObj.buyOrSell === 'Buy' ?  orderObj.id : matchedOrder.id;
-                    console.log("Start matching order");
-                    console.log(`Buy order id: ${buyOrderId}`);
-                    console.log(`Sell order id:${sellOrderId}`);
-                    const txnResponse = await transactOnMarket(buyOrderId, sellOrderId);
-                    console.log("Process transact on market resposnse: " + txnResponse);
-                    // .then(() => {
-                    //     console.log("Process transact on market resposnse: " + txnResponse);
-                    // }).catch( (e) => {
-                    //     console.log("Transaction on Market error.")
-                    // });        
-    //         });     
-    // }).catch((e) => {
-        //console.log('Issue program exception.');
-        //console.log(e);
-        //console.log(e.stack);
-        //process.exit(-1);
+    const matchedOrderList = await getProposeMatchingOrders(orderObj.stockCode, priceFilter, matchingBuyOrSell);
+    console.log(matchedOrderList);
+    matchedOrderList.forEach(async matchedOrder => {
+        let sellOrderId = orderObj.buyOrSell === 'Sell' ? orderObj.id : matchedOrder.id;
+        let buyOrderId = orderObj.buyOrSell === 'Buy' ? orderObj.id : matchedOrder.id;
+        console.log("Start matching order");
+        console.log(`Buy order id: ${buyOrderId}`);
+        console.log(`Sell order id:${sellOrderId}`);
+        const txnResponse = await transactOnMarket(buyOrderId, sellOrderId);
+        console.log("Process transact on market resposnse: " + txnResponse);
+
     });
 });
