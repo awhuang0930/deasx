@@ -218,10 +218,7 @@ main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
                     }).catch( (e) => {
                         console.log("Transaction on Market error.")
                     });        
-            })
-            .catch(e => {
-                //console.log("")
-            });        
+            });     
     }).catch((e) => {
         console.log('Issue program exception.');
         console.log(e);
