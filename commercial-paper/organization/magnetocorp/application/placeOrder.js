@@ -65,6 +65,7 @@ async function main(buyOrSell, stockCode, price, orderUnit) {
         // issue commercial paper
         console.log('Submit commercial paper issue transaction.');
 
+<<<<<<< HEAD
         // let buyOrSell = 'Sell';
         // let stockCode = 'ANZ';
         // let price = '32.10';
@@ -77,6 +78,20 @@ async function main(buyOrSell, stockCode, price, orderUnit) {
             //orderId = orderResponse.id;
             let orderObj = JSON.parse(orderResponse);
             return orderObj;
+=======
+        let buyOrSell = 'Sell';
+        let stockCode = 'ANZ';
+        let price = '52.10';
+        let orderUnit = '78';
+        let orderId = '';
+        const orderResponse = await contract.submitTransaction('placeOrder','YvonneCorp',stockCode, orderUnit, price, buyOrSell);
+        // process response
+        console.log('Process place order transaction response:  ' + orderResponse);
+        if (typeof orderResponse === 'object' && orderResponse !== null){
+	    let tradeObj = JSON.parse(orderResponse);
+            //console.log("orderResponse.id:" + tradeObj.id);
+            orderId = tradeObj.id;
+>>>>>>> 84677848bf72326591f9a8317fc93a29177c4455
         }else{
             return null;
         }
@@ -142,15 +157,16 @@ async function transactOnMarket(buyOrSell, stockCode, price, orderId) {
         let priceFilter = buyOrSell === 'Sell' ? { "$gte": price.toString() } : { "$lte": price.toString() };
         let matchingBuyOrSell = buyOrSell === 'Sell' ? 'Buy' : 'Sell';
 
-        const ordersToMatch = getProposeMatchingOrders(stockCode, priceFilter, matchingBuyOrSell);
+        const ordersToMatch = await getProposeMatchingOrders(stockCode, priceFilter, matchingBuyOrSell);
+	console.log(ordersToMatch);
 
-        ordersToMatch.forEach( o => {
+        ordersToMatch.forEach( async o => {
             let sellOrderId = buyOrSell === 'Sell' ? orderId : o.id;
             let buyOrderId = buyOrSell === 'Buy' ?  orderId : o.id;
             console.log("Start matching order");
             console.log(`Buy order id: ${buyOrderId}`);
             console.log(`Sell order id:${sellOrderId}`);
-            const txnResponse = await contract.submitTransaction('transact', buyOrderId,sellOrderId);          
+            const txnResponse = await contract.submitTransaction('transact', buyOrderId, sellOrderId);          
             console.log("Process transaction resposnse: " + txnResponse);
         })
         //let paper = TradeOrder.fromBuffer(issueResponse);
@@ -173,12 +189,11 @@ async function transactOnMarket(buyOrSell, stockCode, price, orderId) {
 }
 
 async function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
-    let stockCode = 'ANZ';
-    let askPrice = 42.00;
-    let priceFilter = { "$gt": askPrice.toString() }
+	console.log('stockCode:' + stockCode);
+	console.log(priceFilter);
+	console.log('buyOrSell:' + buyOrSell);
 
-    // Make a request for a user with a given ID
-    axios.post('http://192.168.171.216:5984/mychannel_deasxcontract/_find', {
+    const response = await axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
         "selector": {
             "stockCode": stockCode,
             "class": "org.deasx.tradeOrder",
@@ -195,26 +210,19 @@ async function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
         ],
         "sort": [{ "price": "desc" }],
         "limit": 50
-    })
-        .then(function (response) {
-            // handle success
-            let result = response.data.docs.map(d => {
+    });
+    //console.log(response.data.docs);
+    // handle success
+    let result = response.data.docs.map(d => {
                 return {
                     id: d.id,
                     unitOnMarket: d.unitOnMarket
                 };
             });
-            //console.log(response.data.docs);
-            return result;
-        })
-        .catch(function (error) {
-            // handle error
-            //console.log(error);
-        })
-        .then(function () {
-            // always executed
-        });
+    //console.log(result);
+    return result;
 };
+
 
 main('Sell', 'ANZ', '52.10', '88').then((orderObj) => {
     
