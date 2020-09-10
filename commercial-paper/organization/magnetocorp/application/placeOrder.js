@@ -160,7 +160,7 @@ async function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
 	console.log(priceFilter);
 	console.log('buyOrSell:' + buyOrSell);
 
-    const response = await axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
+    axios.post('http://172.17.166.247:5984/mychannel_deasxcontract/_find', {
         "selector": {
             "stockCode": stockCode,
             "class": "org.deasx.tradeOrder",
@@ -177,17 +177,26 @@ async function getProposeMatchingOrders(stockCode, priceFilter, buyOrSell) {
         ],
         "sort": [{ "price": "desc" }],
         "limit": 50
-    });
-    //console.log(response.data.docs);
-    // handle success
-    let result = response.data.docs.map(d => {
+    })
+    .then(function (response) {
+        // handle success
+        let result = response.data.docs.map(d=>{
                 return {
-                    id: d.id,
-                    unitOnMarket: d.unitOnMarket
+                    id : d.id,
+                    unitOnMarket : d.unitOnMarket
                 };
-            });
-    //console.log(result);
-    return result;
+        });
+        //console.log(response.data.docs);
+        //console.log(result);
+        return result;
+    })
+    .catch(function (error) {
+    // handle error
+    //console.log(error);
+    })
+    .then(function () {
+    // always executed
+    }); 
 };
 
 
