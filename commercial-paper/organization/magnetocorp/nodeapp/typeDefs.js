@@ -24,11 +24,23 @@ const typeDefs = gql`
     bidList: [AskBidItem]
   }
 
+  type Transaction {
+    stockCode: String!
+    buyer: String!
+    seller: String!
+    price: Float!
+    unit: Int!
+    tradeTime: String!
+    currentState: Int!
+    creator: String!
+  }
+
   # The "Query" type is special: it lists all of the available queries that
   # clients can execute, along with the return type for each. In this
   # case, the "books" query returns an array of zero or more Books (defined above).
   type Query {
     orders(stockCode:String!) : MarketDepth
+    queryTransaction : [Transaction]
   }
 
   # The "Mutation" type is also special.

@@ -67,27 +67,6 @@ const queryOrder = async (parent, args) => {
             }
         });
 
-        // let aggregatedAskList = [];
-        // let current = null;
-        // for (const item of askList) {
-        //     if ( current != null ){
-        //        if(item.key != current.key){
-        //             aggregatedAskList.push(current);
-        //             current = null;
-        //             console.log(current);
-        //         }
-        //     }
-        //     current= { 
-        //         key: item.key, 
-        //         price: item.price, 
-        //         unitOnMarket : (current||{unitOnMarket:0}).unitOnMarket + item.unitOnMarket
-        //     };
-        // }
-        // aggregatedAskList.push(current);
-
-
-        //console.log(aggregatedAskList);
-
         const bidList = fetchedList.filter( f => {
             return  f.buyOrSell === 'Buy';
         })

@@ -2,13 +2,15 @@ const { ApolloServer } = require('apollo-server');
 const typeDefs = require('./typeDefs.js');
 const marketQuery = require('./rsvMarketQuery.js');
 const placeOrder = require('./rsvPlaceOrder.js');
+const queryTransaction = require('./rsvTransactionQuery.js');
 
 
   // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
-      orders: marketQuery
+      orders: marketQuery,
+      queryTransaction : queryTransaction
     },
     Mutation: {
       placeOrder: placeOrder
