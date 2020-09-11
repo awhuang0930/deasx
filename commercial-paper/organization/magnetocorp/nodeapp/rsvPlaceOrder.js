@@ -168,7 +168,7 @@ const getProposeMatchingOrders = async (stockCode, priceFilter, buyOrSell) => {
 const placeOrder = async (parent, args) => {
     console.log(args);
 
-    placeAOrder(args.buyOrSell, args.stockCode, args.price, args.unit).then(async (orderObj) => {
+    placeAOrder(args.buyOrSell, args.stockCode, args.price.toString(), args.unit.toString()).then(async (orderObj) => {
         console.log('Place order complete.');
         console.log(orderObj);
 
