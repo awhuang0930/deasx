@@ -47,7 +47,7 @@ const placeAOrder = async (buyOrSell, stockCode, price, orderUnit) => {
 
         // issue commercial paper
         console.log('Submit commercial paper issue transaction.');
-        const orderResponse = await contract.submitTransaction('placeOrder', 'YvonneCorp', stockCode, orderUnit, price, buyOrSell);
+        const orderResponse = await contract.submitTransaction('placeOrder', 'MegentoCorp', stockCode, orderUnit, price, buyOrSell);
         // process response
         console.log('Process place order response:  ' + orderResponse);
         if (typeof orderResponse === 'object' && orderResponse !== null) {
