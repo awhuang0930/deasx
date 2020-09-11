@@ -132,7 +132,7 @@ const getProposeMatchingOrders = async (stockCode, priceFilter, buyOrSell) => {
     console.log('buyOrSell:' + buyOrSell);
 
     try {
-        const response = await axios.post('http://172.17.166.244:5984/mychannel_deasxcontract/_find', {
+        const response = await axios.post('http://localhost:5984/mychannel_deasxcontract/_find', {
             "selector": {
                 "stockCode": stockCode,
                 "class": "org.deasx.tradeOrder",
@@ -168,7 +168,7 @@ const getProposeMatchingOrders = async (stockCode, priceFilter, buyOrSell) => {
 const placeOrder = async (parent, args) => {
     console.log(args);
 
-    placeAOrder('Sell', 'ANZ', '72.10', '88').then(async (orderObj) => {
+    placeAOrder(args.buyOrSell, args.stockCode, args.price, args.unit).then(async (orderObj) => {
         console.log('Place order complete.');
         console.log(orderObj);
 
@@ -191,6 +191,7 @@ const placeOrder = async (parent, args) => {
             const txnResponse = await transactOnMarket(buyOrderId, sellOrderId);
             console.log("Process transact on market resposnse: " + txnResponse);
         }
+        console.log("Transact on existing orders on market completed.");
     });
 
     return 0;

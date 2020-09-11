@@ -13,11 +13,22 @@ const typeDefs = gql`
       unitOnMarket: Int!
   }
 
+  type AskBidItem {
+    key: Int!
+    price: Float!
+    unitOnMarket: Int!   
+  }
+
+  type MarketDepth {
+    askList: [AskBidItem],
+    bidList: [AskBidItem]
+  }
+
   # The "Query" type is special: it lists all of the available queries that
   # clients can execute, along with the return type for each. In this
   # case, the "books" query returns an array of zero or more Books (defined above).
   type Query {
-    orders(stockCode:String!, buyOrSell:String!) : [Order]
+    orders(stockCode:String!) : MarketDepth
   }
 
   # The "Query" type is special: it lists all of the available queries that
