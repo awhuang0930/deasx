@@ -8,12 +8,14 @@ const placeOrder = require('./rsvPlaceOrder.js');
 // schema. This resolver retrieves books from the "books" array above.
 const resolvers = {
     Query: {
-      orders: marketQuery,
-      placeOrder: placeOrder
+      orders: marketQuery
     },
+    Mutation: {
+      placeOrder: placeOrder
+    }
   };
 
-  // The ApolloServer constructor requires two parameters: your schema
+// The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
 const server = new ApolloServer({ typeDefs, resolvers });
 
