@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const queryTransaction = async (parent, args) => {
-    console.log(args);
+    console.log("searching for 30 most recent transactions.");
 
     try {
         //const response = await axios.post('http://172.17.166.244:5984/mychannel_deasxcontract/_find', {
