@@ -19,6 +19,13 @@ const typeDefs = gql`
   type Query {
     orders(stockCode:String!, buyOrSell:String!): [Order]
   }
+
+  # The "Query" type is special: it lists all of the available queries that
+  # clients can execute, along with the return type for each. In this
+  # case, the "books" query returns an array of zero or more Books (defined above).
+  type Mutation {
+    placeOrder: Int!
+  }
 `;
 
 module.exports = typeDefs
