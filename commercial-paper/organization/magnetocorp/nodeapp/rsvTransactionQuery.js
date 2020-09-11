@@ -23,7 +23,7 @@ const queryTransaction = async (parent, args) => {
             "limit":30
         });
 
-        console.log(response.data.docs);
+        //console.log(response.data.docs);
         return response.data.docs.map(m => {
             return {
                 stockCode : m.stockCode,
