@@ -184,7 +184,7 @@ const placeOrder = async (parent, args) => {
         console.log(matchedOrderList);
         for (const matchedOrder of matchedOrderList) {
             let sellOrderId = orderObj.buyOrSell === 'Sell' ? orderObj.id : matchedOrder.id;
-            let buyOrderId = orderObj.buyOrSell === 'Buy' ? orderObj.id : matchedOrder.id; DC
+            let buyOrderId = orderObj.buyOrSell === 'Buy' ? orderObj.id : matchedOrder.id;
             console.log("Start matching order");
             console.log(`Buy order id: ${buyOrderId}`);
             console.log(`Sell order id:${sellOrderId}`);
