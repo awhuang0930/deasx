@@ -7,7 +7,7 @@ const TradeOrder = require('../contract/lib/order.js');
 
 // A wallet stores a collection of identities for use
 //const wallet = new FileSystemWallet('../user/isabella/wallet');
-const wallet = new FileSystemWallet('../identity/user/isabella/wallet');
+const wallet = new FileSystemWallet('../identity/user/balaji/wallet');
 
 const placeAOrder = async (buyOrSell, stockCode, price, orderUnit) => {
     // A gateway defines the peers used to access Fabric networks
@@ -18,7 +18,7 @@ const placeAOrder = async (buyOrSell, stockCode, price, orderUnit) => {
 
         // Specify userName for network access
         // const userName = 'isabella.issuer@magnetocorp.com';
-        const userName = 'User1@org1.example.com';
+        const userName = 'Admin@org1.example.com';
 
         // Load connection profile; will be used to locate a gateway
         let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/networkConnection.yaml', 'utf8'));
@@ -82,7 +82,7 @@ const transactOnMarket = async (buyOrderId, sellOrderId) => {
 
         // Specify userName for network access
         // const userName = 'isabella.issuer@magnetocorp.com';
-        const userName = 'User1@org1.example.com';
+        const userName = 'Admin@org1.example.com';
 
         // Load connection profile; will be used to locate a gateway
         let connectionProfile = yaml.safeLoad(fs.readFileSync('../gateway/networkConnection.yaml', 'utf8'));
