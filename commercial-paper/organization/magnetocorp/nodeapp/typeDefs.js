@@ -31,11 +31,9 @@ const typeDefs = gql`
     orders(stockCode:String!) : MarketDepth
   }
 
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
+  # The "Mutation" type is also special.
   type Mutation {
-    placeOrder(stockCode:String!, buyOrSell:String!) : Int!
+    placeOrder(stockCode:String!, buyOrSell:String!, price:Float!, unit: Int!) : Int!
   }
 `;
 
