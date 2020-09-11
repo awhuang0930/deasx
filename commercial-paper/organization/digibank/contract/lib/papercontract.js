@@ -119,6 +119,29 @@ class CommercialPaperContract extends Contract {
         return paper;
     }
 
+    /***
+     *  Query All current papers
+     */
+    async queryAllPaper(ctx, startNumber, endNumber) {
+
+        let startKey = CommercialPaper.makeKey(['MagnetoCorp', startNumber]);
+        let endKeyKey = CommercialPaper.makeKey(['MagnetoCorp', endNumber]);
+        // Update the paper
+        let res = await ctx.paperList.queryAllPaper(startKey,endKeyKey);
+        return res;
+    }
+
+        /***
+     *  Query All current papers
+     */
+    async queryPaper(ctx, query) {
+        console.log("Allan queryString is:" + query);
+
+        // Update the paper
+        let res = await ctx.paperList.queryState(query);
+        return res;
+    }
+
     /**
      * Redeem commercial paper
      *

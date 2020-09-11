@@ -93,6 +93,27 @@ class State {
         return key.split(':');
     }
 
+    static createGuid() {  
+        function _p8(s) {  
+           var p = (Math.random().toString(16)+"000000000").substr(2,8);  
+           return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;  
+        }  
+        return _p8() + _p8(true) + _p8(true) + _p8();  
+     }  
+
+     static formatDatetime(date_ob){        
+        let date = ("0" + date_ob.getDate()).slice(-2);
+        let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+        let year = date_ob.getFullYear();
+        let hours = ("0" + (date_ob.getHours() + 1)).slice(-2);
+        let minutes = ("0" + (date_ob.getMinutes() + 1)).slice(-2);
+        let seconds = ("0" + (date_ob.getSeconds() + 1)).slice(-2);
+        let milliseconds = ("00" + (date_ob.getMilliseconds() + 1)).slice(-3);
+
+        // return date & time in YYYY-MM-DD HH:MM:SS format
+        return year + "-" + month + "-" + date + "T" + hours + ":" + minutes + ":" 
+        + seconds + '.' + milliseconds + 'Z';
+     }
 }
 
 module.exports = State;
