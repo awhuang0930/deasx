@@ -1,0 +1,117 @@
+@media screen and (max-width: 767px) {
+  .columns {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    height: 350px;
+  }
+  .list {
+    margin-top: 10px;
+    padding-right: 0px;
+    padding-left: 0px;
+    list-style-type: none;
+  }
+  .list-item {
+    line-height: 10px;
+  }
+  .div-block {
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-left: 20px;
+  }
+  .select-field {
+    width: 200px;
+  }
+  .text-field {
+    width: 200px;
+  }
+  .text-field-2 {
+    width: 200px;
+  }
+  .submit-button {
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+  .columns-2 {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .columns-3 {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .columns-4 {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    height: 150px;
+  }
+  .columns-5 {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .section {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #000;
+  }
+  .heading {
+    position: static;
+  }
+  .column {
+    -webkit-align-self: auto;
+    -ms-flex-item-align: auto;
+    -ms-grid-row-align: auto;
+    align-self: auto;
+    text-align: center;
+  }
+  .column-2 {
+    text-align: center;
+  }
+  .section-2 {
+    border: 1px solid #000;
+  }
+  .heading-2 {
+    border-bottom: 1px solid #000;
+  }
+  .section-3 {
+    padding: 10px;
+  }
+  .section-4 {
+    padding: 10px;
+  }
+  .heading-3 {
+    border-bottom: 1px solid #000;
+  }
+  .div-block-2 {
+    height: 350px;
+  }
+  .columns-6 {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .div-block-3 {
+    padding-top: 3px;
+    padding-bottom: 13px;
+  }
+  .columns-7 {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  .div-block-4 {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+}

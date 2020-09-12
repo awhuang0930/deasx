@@ -1,0 +1,90 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 10vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: top;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.column-2 {
+  text-align: center;
+}
+.section-2 {
+  border: 1px solid #000;
+}
+.heading-2 {
+  border-bottom: 1px solid #000;
+}
+.section-3 {
+  padding: 10px;
+}
+.section-4 {
+  padding: 10px;
+}
+.heading-3 {
+  border-bottom: 1px solid #000;
+}
+.div-block-2 {
+  height: 350px;
+}
+.columns-6 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.div-block-3 {
+  padding-top: 3px;
+  padding-bottom: 13px;
+}
+.columns-7 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.div-block-4 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.list {
+  margin-top: 10px;
+  padding-right: 0px;
+  padding-left: 0px;
+  list-style-type: none;
+}
+.list-item {
+  font-size: 14px;
+  line-height: 24px;
+}
