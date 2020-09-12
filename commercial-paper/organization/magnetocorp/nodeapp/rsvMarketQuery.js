@@ -26,7 +26,7 @@ const queryOrder = async (parent, args) => {
     // console.log('buyOrSell:' + buyOrSell);
 
     try {
-        const response = await axios.post('http://172.17.166.244:5984/mychannel_deasxcontract/_find', {
+        const response = await axios.post('http://localhost:5984/mychannel_deasxcontract/_find', {
             "selector": {
                 "stockCode": args.stockCode,
                 "class": "org.deasx.tradeOrder",
