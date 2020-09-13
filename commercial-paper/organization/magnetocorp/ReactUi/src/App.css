@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  text-align: left;
 }
 
 .App-logo {
@@ -56,7 +56,7 @@
   border-bottom: 1px solid #000;
 }
 .div-block-2 {
-  height: 350px;
+  height: 200px;
 }
 .columns-6 {
   display: -webkit-box;
@@ -101,11 +101,20 @@
   text-decoration: none;
   cursor: pointer;
   border-radius: 0;
+  margin-left: 10px;
 }
 .uiform-label {
   font-size: 16px;
 }
 .w-select {
   width: 200px;
-  margin-left: 70px;
+}
+.uiform-column{
+  float: left;
+}
+.text-field {
+  width: 200px;
+}
+.text-field-2 {
+  width: 200px;
 }
