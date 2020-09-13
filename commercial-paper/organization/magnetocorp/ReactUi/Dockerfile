@@ -1,6 +1,8 @@
 # 
 # Build docker
-# docker build -t reactapollo:v1.0 .
+# docker build -t org1-reactui:v1.0 .
+# Run docker locally
+# docker run --rm -p 3000:3000 --name org1ui org1-reactui:v1.0
 
 # get the base node image
 FROM node:12.13.0-alpine as builder

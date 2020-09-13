@@ -5,7 +5,8 @@ import './App.css';
 import { ApolloProvider, ApolloClient, InMemoryCache, useQuery, gql, useMutation } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: 'http://172.17.166.243:4000/graphql',
+  //uri: 'http://172.17.166.243:4000/graphql',
+  uri: 'http://www.code2code.com.au:4000/graphql', 
   cache: new InMemoryCache()
 });
 
